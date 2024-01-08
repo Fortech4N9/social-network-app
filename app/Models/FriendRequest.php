@@ -52,13 +52,10 @@ class FriendRequest extends Model {
 
     public function friendRequestExists(string $id_user_one,string $id_user_two,string $status): bool
     {
-        if ($this->where('id_user_one', '=', $id_user_one)
+        return $this->where('id_user_one', '=', $id_user_one)
             ->where('id_user_two', '=', $id_user_two)
             ->where('status', '=', $status)
-            ->exists()) {
-            return true;
-        }
-        return false;
+            ->exists();
     }
 
     public function getAllUsersIdsFriendRequest(string $idUser,string $status): array
