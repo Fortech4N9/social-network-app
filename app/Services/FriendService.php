@@ -58,7 +58,8 @@ class FriendService
             if ($this->friendRequestModel->friendRequestExists($authUser->id, $user['id'], self::EXPECTATION_STATUS)) {
                 $allUsers[$index]['requestSent'] = true;
             }
-            if (!$this->friendModel->friendExists($authUser->id, $user['id'], self::CONFIRMATION_STATUS)) {
+            if (!$this->friendModel->friendExists($authUser->id, $user['id'], self::CONFIRMATION_STATUS) &&
+                !$this->friendModel->friendExists($user['id'], $authUser->id, self::CONFIRMATION_STATUS)) {
                 $allUsersWithoutFriends[] = $allUsers[$index];
             }
 
@@ -70,9 +71,8 @@ class FriendService
     {
         return $this->userModel
             ->getUsersByIds($this->friendRequestModel->getAllUsersIdsFriendRequest(
-                    auth()->user()->id,
-                    self::EXPECTATION_STATUS
-                )
+                auth()->user()->id,
+                self::EXPECTATION_STATUS)
             );
     }
 
@@ -91,9 +91,9 @@ class FriendService
 
     public function cancelFriend(int $friendSenderId, int $friendRecipientId): bool
     {
-        return
-            $this->friendModel->updateFriend($friendRecipientId, $friendSenderId, self::DEVIATION_STATUS)
-            &&
-            $this->friendModel->updateFriend($friendSenderId, $friendRecipientId, self::DEVIATION_STATUS);
+        if ($this->friendModel->friendExists($friendSenderId, $friendRecipientId, self::CONFIRMATION_STATUS)) {
+            return $this->friendModel->updateFriend($friendSenderId, $friendRecipientId, self::DEVIATION_STATUS);
+        }
+        return $this->friendModel->updateFriend($friendRecipientId, $friendSenderId, self::DEVIATION_STATUS);
     }
 }

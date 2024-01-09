@@ -42,9 +42,8 @@ class FriendsController extends Controller
      */
     public function addFriendRequest(Request $request): RedirectResponse
     {
-        $friendRecipientId = $request->input('friendId');
-        $friendSenderId = Auth::user()->id;
-        $this->friendService->addFriendRequest($friendSenderId, $friendRecipientId);
+        $ids = $this->getIds($request);
+        $this->friendService->addFriendRequest($ids['senderId'], $ids['recipientId']);
         return back()->with('success', 'Запрос в друзья отправлен.');
     }
 
@@ -53,9 +52,8 @@ class FriendsController extends Controller
      */
     public function cancelFriendRequest(Request $request): RedirectResponse
     {
-        $friendRecipientId = $request->input('friendId');
-        $friendSenderId = Auth::user()->id;
-        $this->friendService->cancelRequest($friendSenderId, $friendRecipientId);
+        $ids = $this->getIds($request);
+        $this->friendService->cancelRequest($ids['senderId'], $ids['recipientId']);
         return back()->with('success', 'Запрос в друзья отменён.');
     }
 
@@ -64,18 +62,22 @@ class FriendsController extends Controller
      */
     public function cancelFriend(Request $request): RedirectResponse
     {
-        $friendRecipientId = $request->input('friendId');
-        $friendSenderId = Auth::user()->id;
-        $this->friendService->cancelFriend($friendSenderId, $friendRecipientId);
+        $ids = $this->getIds($request);
+        $this->friendService->cancelFriend($ids['senderId'], $ids['recipientId']);
         return back()->with('success', 'Дружба прекращена');
     }
 
     public function addFriend(Request $request): RedirectResponse
     {
-        $friendRecipientId = $request->input('friendId');
-        $friendSenderId = Auth::user()->id;
-
-        $this->friendService->addFriend($friendSenderId, $friendRecipientId);
+        $ids = $this->getIds($request);
+        $this->friendService->addFriend($ids['senderId'], $ids['recipientId']);
         return back()->with('success', 'Пользователь добавлен в друзья');
+    }
+    private function getIds(Request $request): array
+    {
+        return [
+            'senderId'=>Auth::user()->id,
+            'recipientId'=>$request->input('friendId'),
+        ];
     }
 }
