@@ -5,7 +5,10 @@ namespace App\Providers;
 
 use App\Models\Friend;
 use App\Models\FriendRequest;
+use App\Models\Message;
 use App\Models\User;
+use App\Models\UserChat;
+use App\Services\ChatService;
 use App\Services\FriendService;
 use Illuminate\Support\ServiceProvider;
 
@@ -20,7 +23,10 @@ class FriendServiceProvider extends ServiceProvider
             $userModel = new User();
             $friendModel = new Friend();
             $friendRequestModel = new FriendRequest();
-            return new FriendService($friendModel, $userModel, $friendRequestModel);
+            $chatModel = new UserChat();
+            $messagesModel = new Message();
+            $chatService = new ChatService($chatModel, $messagesModel);
+            return new FriendService($friendModel, $userModel, $friendRequestModel, $chatService);
         });
     }
 

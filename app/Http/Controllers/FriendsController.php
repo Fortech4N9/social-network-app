@@ -11,7 +11,6 @@ use Inertia\Response;
 
 class FriendsController extends Controller
 {
-
     protected $friendService;
 
     public function __construct(FriendService $friendService)

@@ -4,7 +4,21 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import '/resources/css/friends/index.css';
 import { Inertia } from '@inertiajs/inertia';
+// Импортируйте ChatModal если он находится в отдельном файле
+import ChatModal from './ChatModal.vue';
 
+// Определите состояние для отображения модального окна
+const isChatOpen = ref(false);
+const currentFriend = ref(null);
+const openChat = (friend) => {
+    currentFriend.value = friend;
+    isChatOpen.value = true;
+};
+
+const closeChat = () => {
+    isChatOpen.value = false;
+    currentFriend.value = null;
+};
 const props = usePage().props;
 const friendsList = ref(props.friendsList.map(friend => ({
     ...friend,
@@ -30,6 +44,9 @@ const declineFriendship = (friend) => {
                         <div class="card p-6 text-gray-900">
                             <img class="preview-image" src="#">
                             <div>{{ friend.name }}</div>
+                            <button class="message-button" @click="openChat(friend)">
+                                Открыть чат
+                            </button>
                             <button class="friend-button" @click="declineFriendship(friend)">
                                 Удалить из друзей
                             </button>
@@ -38,5 +55,10 @@ const declineFriendship = (friend) => {
                 </div>
             </div>
         </div>
+        <ChatModal
+            :is-open="isChatOpen"
+            :friend="currentFriend"
+            @close="closeChat"
+        />
     </AuthenticatedLayout>
 </template>
