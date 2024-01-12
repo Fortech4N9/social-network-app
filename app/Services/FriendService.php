@@ -12,18 +12,20 @@ class FriendService
 
     private Friend $friendModel;
     private User $userModel;
-
+    private ChatService $chatService;
     private FriendRequest $friendRequestModel;
 
     const EXPECTATION_STATUS = 'expectation';
     const DEVIATION_STATUS = 'deviation';
     const CONFIRMATION_STATUS = 'confirmation';
 
-    public function __construct(Friend $friendModel, User $userModel, FriendRequest $friendRequestModel)
+
+    public function __construct(Friend $friendModel, User $userModel, FriendRequest $friendRequestModel,ChatService $chatService)
     {
         $this->friendModel = $friendModel;
         $this->userModel = $userModel;
         $this->friendRequestModel = $friendRequestModel;
+        $this->chatService = $chatService;
     }
 
     public function addFriendRequest(int $friendSenderId, int $friendRecipientId): Model|FriendRequest
@@ -62,7 +64,6 @@ class FriendService
                 !$this->friendModel->friendExists($user['id'], $authUser->id, self::CONFIRMATION_STATUS)) {
                 $allUsersWithoutFriends[] = $allUsers[$index];
             }
-
         }
         return $allUsersWithoutFriends;
     }
@@ -70,23 +71,36 @@ class FriendService
     public function getUsersRequests(): array
     {
         return $this->userModel
-            ->getUsersByIds($this->friendRequestModel->getAllUsersIdsFriendRequest(
-                auth()->user()->id,
-                self::EXPECTATION_STATUS)
+            ->getUsersByIds(
+                $this->friendRequestModel->getAllUsersIdsFriendRequest(
+                    auth()->user()->id,
+                    self::EXPECTATION_STATUS
+                )
             );
     }
 
     public function getUsersFriends(): array
     {
         $friendsIds = $this->friendModel->getAllUserFriendsIds(auth()->user()->id, self::CONFIRMATION_STATUS);
-        return $this->userModel->getUsersByIds($friendsIds);
+        $usersWithModel = $this->userModel->getUsersByIds($friendsIds);
+        $usersChats = $this->getFriendsChatsIds();
+        foreach ($usersWithModel as $index => $user) {
+            foreach ($usersChats as $chats){
+                if ($chats['id_user_one']==$user['id']||$chats['id_user_two']==$user['id']){
+                    $usersWithModel[$index]['chatId'] = $chats['id'];
+                }
+            }
+        }
+        return $usersWithModel;
     }
 
-    public function addFriend(int $friendSenderId, int $friendRecipientId): Friend|Model
+    public function addFriend(int $friendSenderId, int $friendRecipientId): bool
     {
-        $this->friendRequestModel->updateFriend($friendRecipientId, $friendSenderId, self::CONFIRMATION_STATUS);
-        return $this->friendModel
-            ->createFriend($friendSenderId, $friendRecipientId, self::CONFIRMATION_STATUS);
+        $this->chatService->addChat($friendSenderId, $friendRecipientId);
+        return
+            $this->friendRequestModel->updateFriend($friendRecipientId, $friendSenderId, self::CONFIRMATION_STATUS)
+            &&
+            $this->friendModel->createFriend($friendSenderId, $friendRecipientId, self::CONFIRMATION_STATUS);
     }
 
     public function cancelFriend(int $friendSenderId, int $friendRecipientId): bool
@@ -95,5 +109,10 @@ class FriendService
             return $this->friendModel->updateFriend($friendSenderId, $friendRecipientId, self::DEVIATION_STATUS);
         }
         return $this->friendModel->updateFriend($friendRecipientId, $friendSenderId, self::DEVIATION_STATUS);
+    }
+
+    public function getFriendsChatsIds(){
+
+        return $this->chatService->getChatsByAuthUser(auth()->user()->id);
     }
 }

@@ -45,3 +45,79 @@
     transform: translate3d(0, 0, -1em);
 }
 
+.chat-modal{
+    width: 40rem;
+    margin: 40px auto;
+    border-radius: 0.5rem;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.chat-header{
+    display: flex;
+    justify-content: space-between;
+}
+
+.chat-body {
+    width: 37rem;
+    margin: 20px auto;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+}
+
+.tittle-modal{
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+.close-modal{
+    margin-right: 20px;
+    margin-top: 20px;
+}
+
+.messages-history {
+    padding: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.message {
+    padding: 5px;
+    border-bottom: 1px solid #eee;
+}
+
+.username {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.timestamp {
+    float: right;
+    color: #999;
+    font-size: 0.8em;
+}
+
+.send-message-form {
+    display: flex;
+    padding: 10px;
+}
+
+.send-message-form input {
+    flex: 1; /* Поле ввода будет занимать большую часть формы */
+    margin-right: 5px;
+}
+
+.send-message-form button {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+/* Некоторые базовые стили для placeholder */
+.send-message-form input::placeholder {
+    color: #aaa;
+}
+

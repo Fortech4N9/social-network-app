@@ -11,7 +11,6 @@ use Inertia\Response;
 
 class FriendsController extends Controller
 {
-
     protected $friendService;
 
     public function __construct(FriendService $friendService)
@@ -28,7 +27,7 @@ class FriendsController extends Controller
     public function index(): Response
     {
         $friendsList = $this->friendService->getUsersFriends();
-        return Inertia::render('Friends/Index', ['friendsList' => $friendsList]);
+        return Inertia::render('Friends/Index', ['friendsList' => $friendsList, 'user' => auth()->user()]);
     }
 
     public function request(): Response

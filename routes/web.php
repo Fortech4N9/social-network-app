@@ -1,22 +1,12 @@
 <?php
 
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\FriendsController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\MessageController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -49,6 +39,11 @@ Route::prefix('friends')->middleware(['auth', 'verified'])->group(function () {
     Route::post('/cancel-friend-request', [FriendsController::class, 'cancelFriendRequest'])->name('cancel-friend-request');
     Route::post('/add-friend', [FriendsController::class, 'addFriend'])->name('add-friend');
     Route::post('/cancel-friend', [FriendsController::class, 'cancelFriend'])->name('cancel-friend');
+
+    // Маршрут
+    Route::get('/messages/{friendId}', [ChatController::class, 'messages'])->name('messages');
+    Route::post('/send', [ChatController::class, 'send'])->name('send');
+
 });
 
 require __DIR__ . '/auth.php';

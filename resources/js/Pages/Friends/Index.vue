@@ -1,16 +1,35 @@
 <script setup>
-import { ref } from 'vue';
+import {onMounted, ref} from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import '/resources/css/friends/index.css';
 import { Inertia } from '@inertiajs/inertia';
+// Импортируйте ChatModal если он находится в отдельном файле
+import ChatModal from './ChatModal.vue';
 
 const props = usePage().props;
 const friendsList = ref(props.friendsList.map(friend => ({
     ...friend,
-    hidden: false,
+    hidden: false
 })));
 
+const currentChatFriend = ref(null);
+const isChatOpen = ref(false);
+onMounted(() => {
+    const visibleFriend = friendsList.value.find(friend => !friend.hidden);
+    if (visibleFriend) {
+        currentChatFriend.value = visibleFriend;
+    }
+});
+
+const openChat = (friend) => {
+    currentChatFriend.value = friend;
+    isChatOpen.value = true;
+};
+
+const closeChat = () => {
+    isChatOpen.value = false;
+};
 const declineFriendship = (friend) => {
     Inertia.post('/friends/cancel-friend', { friendId: friend.id });
     friend.hidden = true;
@@ -30,6 +49,9 @@ const declineFriendship = (friend) => {
                         <div class="card p-6 text-gray-900">
                             <img class="preview-image" src="#">
                             <div>{{ friend.name }}</div>
+                            <button class="message-button" @click="openChat(friend)">
+                                Открыть чат
+                            </button>
                             <button class="friend-button" @click="declineFriendship(friend)">
                                 Удалить из друзей
                             </button>
@@ -38,5 +60,13 @@ const declineFriendship = (friend) => {
                 </div>
             </div>
         </div>
+        <ChatModal
+            v-if="isChatOpen"
+            :key="currentChatFriend.value ? currentChatFriend.value.id : ''"
+            :is-open="isChatOpen"
+            :friend="currentChatFriend"
+            :user="props.user"
+            @close="closeChat"
+        />
     </AuthenticatedLayout>
 </template>
