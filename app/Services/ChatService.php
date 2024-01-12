@@ -3,13 +3,16 @@
 namespace App\Services;
 
 use App\Models\Message;
+use App\Models\User;
 use App\Models\UserChat;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class ChatService
 {
     private UserChat $chatModel;
     private Message $messageModel;
+
     public function __construct(UserChat $chatModel, Message $messageModel)
     {
         $this->chatModel = $chatModel;
@@ -36,5 +39,15 @@ class ChatService
     public function getChatsByAuthUser($id): array
     {
         return $this->chatModel->getChatsIdsByUser($id);
+    }
+
+    public function addMessage(int $chatId, string $message, int $senderMessage): Model|Message
+    {
+        return $this->messageModel->createMessage($chatId, $message, $senderMessage);
+    }
+
+    public function getUserById(int $id): Model|Collection|array|User|null
+    {
+        return (new User)->find($id);
     }
 }

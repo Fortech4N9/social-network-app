@@ -41,14 +41,15 @@ class UserChat extends Model
     {
         return $this
             ->where('id_user_one', '=', $idUserOne)
-            ->where('id_user_two', '=,', $idUserTwo)
+            ->where('id_user_two', '=', $idUserTwo)
             ->exists();
     }
 
     public function getChatId($idUserOne, $idUserTwo): array
     {
+
         return $this->where('id_user_one', '=', $idUserOne)
-            ->where('id_user_two', '=,', $idUserTwo)
+            ->where('id_user_two', '=', $idUserTwo)
             ->orderBy('updated_at', 'desc')
             ->select('id')
             ->first()

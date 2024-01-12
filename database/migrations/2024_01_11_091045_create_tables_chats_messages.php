@@ -24,8 +24,10 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->unsignedBigInteger('chat_id')->nullable(false);
+            $table->integer('sender_id')->nullable(false);
             $table->string('message')->nullable(false);
             $table->foreign('chat_id')->references('id')->on('users_chats')->onDelete('cascade');
+            $table->foreign('senderId')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

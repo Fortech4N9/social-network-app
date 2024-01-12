@@ -40,7 +40,8 @@ Route::prefix('friends')->middleware(['auth', 'verified'])->group(function () {
     Route::post('/add-friend', [FriendsController::class, 'addFriend'])->name('add-friend');
     Route::post('/cancel-friend', [FriendsController::class, 'cancelFriend'])->name('cancel-friend');
 
-    Route::get('/messages', [ChatController::class, 'messages'])->name('messages');
+    // Маршрут
+    Route::get('/messages/{friendId}', [ChatController::class, 'messages'])->name('messages');
     Route::post('/send', [ChatController::class, 'send'])->name('send');
 
 });

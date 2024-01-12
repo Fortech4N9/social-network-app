@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Events\MessageSent;
 use App\Http\Requests\MessageFormRequest;
+use App\Models\Message;
 use App\Services\ChatService;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
@@ -21,13 +23,15 @@ class ChatController extends Controller
         return $this->chatService->getMessagesByFriend(Auth::user()->id, $friendId);
     }
 
-    public function send(MessageFormRequest $request)
+    public function send(MessageFormRequest $request): Model|Message
     {
-        $message = $request->user()
-            ->messages()
-            ->create($request->validated());
+        $chatId = $request->input('chatId');
+        $message = $request->input('message');
+        $userId = Auth::user()->id;
+        $message = $this->chatService->addMessage($chatId, $message, $userId);
+        $user = $this->chatService->getUserById($userId);
+        broadcast(new MessageSent($user, $message));
 
-        broadcast(new MessageSent($request->user(), $message));
         return $message;
     }
 }

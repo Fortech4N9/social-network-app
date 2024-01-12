@@ -19,17 +19,8 @@ class Message extends Model
     protected $fillable = [
         'chat_id',
         'message',
+        'sender_id',
     ];
-
-    public function userOne(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'id_user_one');
-    }
-
-    public function userTwo(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'id_user_two');
-    }
 
     public function chat(): BelongsTo
     {
@@ -39,5 +30,10 @@ class Message extends Model
     public function getAllMessagesByChatId($chatId): array
     {
         return $this->where('chat_id', '=', $chatId)->get()->toArray();
+    }
+
+    public function createMessage(int $chatId, string $message, int $senderId): Model|Message
+    {
+        return $this->create(['chat_id' => $chatId, 'message' => $message, 'sender_id' => $senderId]);
     }
 }

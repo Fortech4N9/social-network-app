@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import {onMounted, ref} from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import '/resources/css/friends/index.css';
@@ -7,24 +7,29 @@ import { Inertia } from '@inertiajs/inertia';
 // Импортируйте ChatModal если он находится в отдельном файле
 import ChatModal from './ChatModal.vue';
 
-// Определите состояние для отображения модального окна
+const props = usePage().props;
+const friendsList = ref(props.friendsList.map(friend => ({
+    ...friend,
+    hidden: false
+})));
+
+const currentChatFriend = ref(null);
 const isChatOpen = ref(false);
-const currentFriend = ref(null);
+onMounted(() => {
+    const visibleFriend = friendsList.value.find(friend => !friend.hidden);
+    if (visibleFriend) {
+        currentChatFriend.value = visibleFriend;
+    }
+});
+
 const openChat = (friend) => {
-    currentFriend.value = friend;
+    currentChatFriend.value = friend;
     isChatOpen.value = true;
 };
 
 const closeChat = () => {
     isChatOpen.value = false;
-    currentFriend.value = null;
 };
-const props = usePage().props;
-const friendsList = ref(props.friendsList.map(friend => ({
-    ...friend,
-    hidden: false,
-})));
-
 const declineFriendship = (friend) => {
     Inertia.post('/friends/cancel-friend', { friendId: friend.id });
     friend.hidden = true;
@@ -56,8 +61,11 @@ const declineFriendship = (friend) => {
             </div>
         </div>
         <ChatModal
+            v-if="isChatOpen"
+            :key="currentChatFriend.value ? currentChatFriend.value.id : ''"
             :is-open="isChatOpen"
-            :friend="currentFriend"
+            :friend="currentChatFriend"
+            :user="props.user"
             @close="closeChat"
         />
     </AuthenticatedLayout>

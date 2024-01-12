@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -61,5 +64,14 @@ class User extends Authenticatable
             ->select('id', 'name')
             ->get()
             ->toArray();
+    }
+    public function userOne(): HasMany
+    {
+        return $this->hasMany(UserChat::class, 'id_user_one');
+    }
+
+    public function userTwo(): HasMany
+    {
+        return $this->hasMany(UserChat::class, 'id_user_two');
     }
 }
