@@ -23,7 +23,7 @@ const cancelRequest = (friend) => {
     <Head title="Dashboard"/>
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Search friends</h2>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Ищи новых кентов!</h2>
         </template>
         <div class="friend-list" v-for="friend in friendsList" :key="friend.id">
             <div class="py-12" style="padding-bottom: 0">

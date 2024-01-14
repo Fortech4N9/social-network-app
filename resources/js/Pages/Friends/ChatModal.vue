@@ -1,7 +1,6 @@
 <script>
 import {onMounted, reactive, toRefs} from "vue";
 import useChat from "@/composables/chat.js";
-
 export default {
     props: {
         isOpen: Boolean,
@@ -20,14 +19,7 @@ export default {
             this.$emit('close');
         },
         formatDate(dateString) {
-            const options = {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: false
-            };
+            const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false };
             const date = new Date(dateString);
             const locale = 'ru-RU';
 
@@ -67,7 +59,7 @@ export default {
             errors,
             form,
             sendMessage,
-            messages
+            messages,
         };
     },
 };

@@ -30,22 +30,27 @@ const showingNavigationDropdown = ref(false);
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                    Dashboard
+                                    Моя страница
                                 </NavLink>
                             </div>
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink :href="route('index')" :active="route().current('index')">
-                                    My friends
+                                    Друзья
                                 </NavLink>
                             </div>
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink :href="route('search-friends')" :active="route().current('search-friends')">
-                                    Search friends
+                                    Поиск новых друзей
                                 </NavLink>
                             </div>
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink :href="route('request-friends')" :active="route().current('request-friends')">
-                                    Requests friends
+                                    Запросы в друзья
+                                </NavLink>
+                            </div>
+                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <NavLink :href="route('friends-posts')" :active="route().current('friends-posts')">
+                                    Новости
                                 </NavLink>
                             </div>
                         </div>
@@ -81,7 +86,7 @@ const showingNavigationDropdown = ref(false);
                                     <template #content>
                                         <DropdownLink :href="route('profile.edit')"> Profile </DropdownLink>
                                         <DropdownLink :href="route('logout')" method="post" as="button">
-                                            Log Out
+                                            Выход
                                         </DropdownLink>
                                     </template>
                                 </Dropdown>
@@ -128,7 +133,7 @@ const showingNavigationDropdown = ref(false);
                 >
                     <div class="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                            Dashboard
+                            Моя страница
                         </ResponsiveNavLink>
                     </div>
 

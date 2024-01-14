@@ -65,13 +65,4 @@ class User extends Authenticatable
             ->get()
             ->toArray();
     }
-    public function userOne(): HasMany
-    {
-        return $this->hasMany(UserChat::class, 'id_user_one');
-    }
-
-    public function userTwo(): HasMany
-    {
-        return $this->hasMany(UserChat::class, 'id_user_two');
-    }
 }

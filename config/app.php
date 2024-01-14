@@ -170,6 +170,7 @@ return [
         App\Providers\FriendServiceProvider::class,
         App\Providers\ChatServiceProvider::class,
         App\Providers\BroadcastServiceProvider::class,
+        App\Providers\PostServiceProvider::class,
 
     ])->toArray(),
 

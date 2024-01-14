@@ -111,7 +111,8 @@ class FriendService
         return $this->friendModel->updateFriend($friendRecipientId, $friendSenderId, self::DEVIATION_STATUS);
     }
 
-    public function getFriendsChatsIds(){
+    public function getFriendsChatsIds(): array
+    {
 
         return $this->chatService->getChatsByAuthUser(auth()->user()->id);
     }

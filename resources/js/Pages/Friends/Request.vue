@@ -26,7 +26,7 @@ const declineFriendship = (friend) => {
     <Head title="Dashboard"/>
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Search friends</h2>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Твои будущие кенты)</h2>
         </template>
         <div v-for="friend in friendsList" :key="friend.id" v-show="!friend.hidden">
             <div class="py-12" style="padding-bottom: 0">
