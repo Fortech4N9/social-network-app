@@ -1,0 +1,140 @@
+.post{
+    display: flex;
+    justify-content: space-between;
+}
+.sm\:rounded-lg{
+    padding: 20px;
+}
+.py-12{
+    padding-top: 2rem;
+    padding-bottom: 0;
+}
+.post-buttons{
+    margin: auto;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.post-button{
+    margin: 5px;
+    width: 160px;
+    border-radius: 0.3rem;
+    padding: 10px;
+    box-shadow: 0px 1px 3px;
+    -webkit-transition: all 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: all 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.post-button.update-post{
+    background-color: #FFFFE0;
+}
+
+
+.post-button.delete-post{
+    background-color: #F08080;
+}
+
+.post-button.request-sent {
+    background-color: #70bf5d;
+}
+
+.post-button.request-sent:hover {
+    background-color: #f34641;
+    color: white;
+}
+
+.post-button:hover {
+    -webkit-transform: translate(10px);
+    transform: translate(10px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    background-color: #e5e7eb;
+    color: #6B7280;
+}
+
+.post-button:active {
+    transform: translate(0em, 0.75em);
+}
+
+.post-button:active::before {
+    transform: translate3d(0, 0, -1em);
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    width: 500px;
+    max-width: 90%;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-header h3 {
+    margin: 0;
+}
+
+.close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 10px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.submit-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.post-header{
+    display: flex;
+    justify-content: space-between;
+}
+
+.post-author{
+    display: flex;
+    gap: 5px;
+}
+
+.post-body{
+    margin: auto;
+}

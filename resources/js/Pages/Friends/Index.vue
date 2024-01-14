@@ -30,6 +30,7 @@ const openChat = (friend) => {
 const closeChat = () => {
     isChatOpen.value = false;
 };
+
 const declineFriendship = (friend) => {
     Inertia.post('/friends/cancel-friend', { friendId: friend.id });
     friend.hidden = true;
@@ -40,7 +41,7 @@ const declineFriendship = (friend) => {
     <Head title="Dashboard"/>
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">My friends</h2>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Твои кенты</h2>
         </template>
         <div v-for="friend in friendsList" :key="friend.id" v-show="!friend.hidden">
             <div class="py-12" style="padding-bottom: 0">
