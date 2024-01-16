@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Friend;
 use App\Models\FriendRequest;
 use App\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 
 class FriendService
@@ -40,7 +41,7 @@ class FriendService
             ->updateFriend($friendRecipientId, $friendSenderId, self::DEVIATION_STATUS);
     }
 
-    private function getAllUsersListWithoutAuthUser(string $userEmail): array
+    public function getAllUsersListWithoutAuthUser(string $userEmail): array
     {
         return $this->userModel
             ->where('email', '!=', $userEmail)
@@ -51,21 +52,31 @@ class FriendService
 
     public function getAllUsers(): array
     {
-        $authUser = auth()->user();
-        $allUsers = $this->getAllUsersListWithoutAuthUser($authUser->email);
+        $authUser = $this->getAuthUser()[0];
+        $allUsers = $this->getAllUsersListWithoutAuthUser($authUser['email']);
 
         $allUsersWithoutFriends = [];
         foreach ($allUsers as $index => $user) {
             $allUsers[$index]['requestSent'] = false;
-            if ($this->friendRequestModel->friendRequestExists($authUser->id, $user['id'], self::EXPECTATION_STATUS)) {
+            if ($this->friendRequestModel->friendRequestExists($authUser['id'], $user['id'], self::EXPECTATION_STATUS)) {
                 $allUsers[$index]['requestSent'] = true;
             }
-            if (!$this->friendModel->friendExists($authUser->id, $user['id'], self::CONFIRMATION_STATUS) &&
-                !$this->friendModel->friendExists($user['id'], $authUser->id, self::CONFIRMATION_STATUS)) {
+            if (!$this->friendModel->friendExists($authUser['id'], $user['id'], self::CONFIRMATION_STATUS) &&
+                !$this->friendModel->friendExists($user['id'], $authUser['id'], self::CONFIRMATION_STATUS)) {
                 $allUsersWithoutFriends[] = $allUsers[$index];
             }
         }
         return $allUsersWithoutFriends;
+    }
+
+    public function getAuthUser(): array
+    {
+        return $this->userModel
+            ->where('id', '=', auth()->user()->id)
+            ->select(['name', 'id','email'])
+            ->first()
+            ->get()
+            ->toArray();
     }
 
     public function getUsersRequests(): array

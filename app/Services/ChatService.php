@@ -29,11 +29,13 @@ class ChatService
         return $this->messageModel->getAllMessagesByChatId($chatId);
     }
 
-    public function addChat(int $friendSenderId, int $friendRecipientId): void
+    public function addChat(int $friendSenderId, int $friendRecipientId): bool
     {
         if (!$this->chatModel->existsChat($friendSenderId, $friendRecipientId)) {
             $this->chatModel->createChat($friendSenderId, $friendRecipientId);
+            return true;
         }
+        return false;
     }
 
     public function getChatsByAuthUser($id): array

@@ -75,7 +75,7 @@ class FriendsController extends Controller
     private function getIds(Request $request): array
     {
         return [
-            'senderId'=>Auth::user()->id,
+            'senderId'=>auth()->user()->id,
             'recipientId'=>$request->input('friendId'),
         ];
     }
