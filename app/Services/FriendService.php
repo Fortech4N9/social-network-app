@@ -52,7 +52,7 @@ class FriendService
 
     public function getAllUsers(): array
     {
-        $authUser = $this->getAuthUser();
+        $authUser = $this->getAuthUser()[0];
         $allUsers = $this->getAllUsersListWithoutAuthUser($authUser['email']);
 
         $allUsersWithoutFriends = [];
