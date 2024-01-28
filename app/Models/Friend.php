@@ -14,6 +14,16 @@ class Friend extends Model
     protected $table = 'friends';
     protected $fillable = ['id_user_one', 'id_user_two', 'status'];
 
+
+    public function getStatusAttribute($value)
+    {
+        return ucfirst($value);
+    }
+
+    public function setStatusAttribute($value)
+    {
+        $this->attributes['status'] = strtolower($value);
+    }
     public function userOne(): BelongsTo
     {
         return $this->belongsTo(User::class, 'id_user_one');

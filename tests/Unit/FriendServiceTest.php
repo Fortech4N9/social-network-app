@@ -63,7 +63,14 @@ class FriendServiceTest extends TestCase
         $this->friendRequestModel->shouldReceive('friendRequestExists')->andReturn(false);
         $this->friendModel->shouldReceive('friendExists')->andReturn(false);
 
-        $this->friendServiceShouldReceive($authenticatedUser,$otherUsers);
+        $this->friendService = Mockery::mock(
+            FriendService::class,
+            [$this->friendModel, $this->userModel, $this->friendRequestModel, $this->chatService]
+        )
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
+        $this->friendService->shouldReceive('getAuthUser')->andReturn($authenticatedUser);
+        $this->friendService->shouldReceive('getAllUsersListWithoutAuthUser')->andReturn($otherUsers);
 
         $otherUsersResult = [
             0 => [
@@ -78,7 +85,9 @@ class FriendServiceTest extends TestCase
             ]
         ];
 
-        $this->checkGetAllUsers($otherUsersResult);
+        $result = $this->friendService->getAllUsers();
+        $this->assertIsArray($result);
+        $this->assertEquals($otherUsersResult, $result);
     }
 
     public function testGetAllUsersIfUserIsAllFriends()
@@ -101,9 +110,18 @@ class FriendServiceTest extends TestCase
         $this->friendRequestModel->shouldReceive('friendRequestExists')->andReturn(false);
         $this->friendModel->shouldReceive('friendExists')->andReturn(true);
 
-        $this->friendServiceShouldReceive($authenticatedUser,$otherUsers);
+        $this->friendService = Mockery::mock(
+            FriendService::class,
+            [$this->friendModel, $this->userModel, $this->friendRequestModel, $this->chatService]
+        )
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
+        $this->friendService->shouldReceive('getAuthUser')->andReturn($authenticatedUser);
+        $this->friendService->shouldReceive('getAllUsersListWithoutAuthUser')->andReturn($otherUsers);
 
-        $this->checkGetAllUsers([]);
+        $result = $this->friendService->getAllUsers();
+        $this->assertIsArray($result);
+        $this->assertEquals([], $result);
     }
 
     public function testGetAllUsersIfUserIsOneFriendAndNoRequest()
@@ -140,7 +158,14 @@ class FriendServiceTest extends TestCase
             $this->friendService::CONFIRMATION_STATUS
         )->andReturn(false);
 
-        $this->friendServiceShouldReceive($authenticatedUser,$otherUsers);
+        $this->friendService = Mockery::mock(
+            FriendService::class,
+            [$this->friendModel, $this->userModel, $this->friendRequestModel, $this->chatService]
+        )
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
+        $this->friendService->shouldReceive('getAuthUser')->andReturn($authenticatedUser);
+        $this->friendService->shouldReceive('getAllUsersListWithoutAuthUser')->andReturn($otherUsers);
 
         $otherUsersResult = [
             0 => [
@@ -150,7 +175,9 @@ class FriendServiceTest extends TestCase
             ]
         ];
 
-        $this->checkGetAllUsers($otherUsersResult);
+        $result = $this->friendService->getAllUsers();
+        $this->assertIsArray($result);
+        $this->assertEquals($otherUsersResult, $result);
     }
 
     public function testGetAllUsersIfUserIsOneFriendAndOneRequest()
@@ -212,7 +239,14 @@ class FriendServiceTest extends TestCase
             $this->friendService::CONFIRMATION_STATUS
         )->andReturn(false);
 
-        $this->friendServiceShouldReceive($authenticatedUser,$otherUsers);
+        $this->friendService = Mockery::mock(
+            FriendService::class,
+            [$this->friendModel, $this->userModel, $this->friendRequestModel, $this->chatService]
+        )
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
+        $this->friendService->shouldReceive('getAuthUser')->andReturn($authenticatedUser);
+        $this->friendService->shouldReceive('getAllUsersListWithoutAuthUser')->andReturn($otherUsers);
 
         $otherUsersResult = [
             0 => [
@@ -227,25 +261,8 @@ class FriendServiceTest extends TestCase
             ],
         ];
 
-        $this->checkGetAllUsers($otherUsersResult);
-    }
-
-    protected function checkGetAllUsers(array $otherUsersResult): void
-    {
         $result = $this->friendService->getAllUsers();
         $this->assertIsArray($result);
         $this->assertEquals($otherUsersResult, $result);
-    }
-
-    protected function friendServiceShouldReceive(array $authenticatedUser,array $otherUsers): void
-    {
-        $this->friendService = Mockery::mock(
-            FriendService::class,
-            [$this->friendModel, $this->userModel, $this->friendRequestModel, $this->chatService]
-        )
-            ->makePartial()
-            ->shouldAllowMockingProtectedMethods();
-        $this->friendService->shouldReceive('getAuthUser')->andReturn($authenticatedUser);
-        $this->friendService->shouldReceive('getAllUsersListWithoutAuthUser')->andReturn($otherUsers);
     }
 }

@@ -11,15 +11,14 @@ use Illuminate\Database\Eloquent\Model;
 class FriendService
 {
 
-    private Friend $friendModel;
-    private User $userModel;
-    private ChatService $chatService;
-    private FriendRequest $friendRequestModel;
-
     const EXPECTATION_STATUS = 'expectation';
     const DEVIATION_STATUS = 'deviation';
     const CONFIRMATION_STATUS = 'confirmation';
 
+    private Friend $friendModel;
+    private User $userModel;
+    private ChatService $chatService;
+    private FriendRequest $friendRequestModel;
 
     public function __construct(Friend $friendModel, User $userModel, FriendRequest $friendRequestModel,ChatService $chatService)
     {
@@ -52,8 +51,8 @@ class FriendService
 
     public function getAllUsers(): array
     {
-        $authUser = $this->getAuthUser()[0];
-        $allUsers = $this->getAllUsersListWithoutAuthUser($authUser['email']);
+        $authUser = $this->getAuthUser();
+        $allUsers = $this->getAllUsersListWithoutAuthUser($this->getAuthUser()['email']);
 
         $allUsersWithoutFriends = [];
         foreach ($allUsers as $index => $user) {
@@ -76,7 +75,7 @@ class FriendService
             ->select(['name', 'id','email'])
             ->first()
             ->get()
-            ->toArray();
+            ->toArray()[0];
     }
 
     public function getUsersRequests(): array

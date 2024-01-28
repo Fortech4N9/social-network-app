@@ -15,20 +15,16 @@ class UserPost extends Model
 {
     use HasFactory;
 
-    // Указываем имя таблицы, если оно не соответствует стандартному наименованию Laravel
     protected $table = 'users_posts';
 
-    // Указываем поля, которые могут быть заполнены через массовое присваивание
     protected $fillable = [
         'id_user',
         'content',
         'title',
     ];
 
-    // Отключаем защиту от массового присваивания для этих полей
     protected $guarded = [];
 
-    // Родительская связь с моделью User
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'id_user');
